@@ -20,6 +20,18 @@ public class GameLogic {
      */
     public static int moveTileUpAsFarAsPossible(int[][] board, int r, int c, int minR) {
         // TODO: Fill this in in tasks 2, 3, 4
+        int i = r - 1;
+        while (i > 0 && board[i][c] == 0) {
+            i--;
+        }
+        int temp = board[r][c];
+        if (i == 0 && board[0][c] == 0) {//swap r,c i,c
+            board[r][c] = board[i][c];
+            board[i][c] = temp;
+        }  else if (i >= 0) {//swap r,c i+1,c 包括 i>0 和 i==0 && boardboard[i][c] != 0 俩情况
+            board[r][c] = board[i + 1][c];
+            board[i + 1][c] = temp;
+        }
         return 0;
     }
 
