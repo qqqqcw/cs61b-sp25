@@ -20,16 +20,26 @@ public class GameLogic {
      */
     public static int moveTileUpAsFarAsPossible(int[][] board, int r, int c, int minR) {
         // TODO: Fill this in in tasks 2, 3, 4
-        int i = r - 1;
-        while (i > 0 && board[i][c] == 0) {
+        int i = r - 1;//当前位置的前一个位置 注意：i可能小于0
+        while (i > 0 && board[i][c] == 0) {//找到第一个非0或者到达边界
             i--;
         }
-        int temp = board[r][c];
+        int temp = board[r][c];//记录当前位置元素
+        if (i < minR) {//保证不超过最小r
+            board[r][c] = 0;
+            board[minR][c] = temp;
+            return 0;
+        }
         if (i == 0 && board[0][c] == 0) {//swap r,c i,c
-            board[r][c] = board[i][c];
+            board[r][c] = 0;
             board[i][c] = temp;
-        }  else if (i >= 0) {//swap r,c i+1,c 包括 i>0 和 i==0 && boardboard[i][c] != 0 俩情况
-            board[r][c] = board[i + 1][c];
+        }  else if (i >= 0) {//swap r,c i+1,c 包括 i>0 和 i==0 && boardboard[i][c] != 0 俩情况,即有阻挡
+            if (board[r][c] == board[i][c]) {//有相同时合并
+                board[r][c] = 0;
+                board[i][c] *= 2;
+                return i + 1;
+            }
+            board[r][c] = 0;
             board[i + 1][c] = temp;
         }
         return 0;
