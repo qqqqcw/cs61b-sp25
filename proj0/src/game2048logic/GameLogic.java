@@ -56,7 +56,6 @@ public class GameLogic {
         for (int i = 0; i < board.length; i++) { //max函数，不然后边又更新回0
             mergeBlockR = Math.max(moveTileUpAsFarAsPossible(board, i, c, mergeBlockR), mergeBlockR);
         }
-        return;
     }
 
     /**
@@ -69,7 +68,6 @@ public class GameLogic {
         for (int i = 0; i < board[0].length; i++) {
             tiltColumn(board, i);
         }
-        return;
     }
 
     /**
@@ -85,22 +83,18 @@ public class GameLogic {
             MatrixUtils.rotateLeft(board);
             tiltUp(board);
             MatrixUtils.rotateRight(board);
-            return;
         } else if (side == Side.WEST) {
             MatrixUtils.rotateRight(board);
             tiltUp(board);
             MatrixUtils.rotateLeft(board);
-            return;
         } else if (side == Side.SOUTH) {
             MatrixUtils.rotateRight(board);
             MatrixUtils.rotateRight(board);
             tiltUp(board);
             MatrixUtils.rotateLeft(board);
             MatrixUtils.rotateLeft(board);
-            return;
         } else {
             tiltUp(board);
-            return;
         }
     }
 }
