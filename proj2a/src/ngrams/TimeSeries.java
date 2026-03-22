@@ -1,7 +1,10 @@
 package ngrams;
 
-import java.util.List;
-import java.util.TreeMap;
+import edu.princeton.cs.algs4.In;
+
+import java.sql.Array;
+import java.sql.Time;
+import java.util.*;
 
 /**
  * An object for mapping a year number (e.g. 1996) to numerical data. Provides
@@ -31,6 +34,15 @@ public class TimeSeries extends TreeMap<Integer, Double> {
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
         super();
         // TODO: Fill in this constructor.
+//        Set<Integer>years = ts.keySet(); 原解法
+//        for(int year : years) {
+//            if (year >= startYear && year <= endYear) {
+//                this.put(year, ts.get(year));
+//            }
+//        }
+        // Use subMap to copy only the requested range efficiently ai解法
+        SortedMap<Integer, Double> sub = ts.subMap(startYear, true, endYear, true);
+        this.putAll(sub);
     }
 
     /**
@@ -38,7 +50,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public List<Integer> years() {
         // TODO: Fill in this method.
-        return null;
+        return new ArrayList<>(this.keySet());
     }
 
     /**
@@ -47,7 +59,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public List<Double> data() {
         // TODO: Fill in this method.
-        return null;
+        return new ArrayList<>(this.values());
     }
 
     /**
@@ -61,7 +73,24 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries plus(TimeSeries ts) {
         // TODO: Fill in this method.
-        return null;
+//        原解法
+//        TimeSeries PlusTimeSeries = new TimeSeries(this, MIN_YEAR, MAX_YEAR);
+//        List<Integer> years = ts.years();
+//        for (int year : years) {
+//            if (PlusTimeSeries.containsKey(year)) {
+//                PlusTimeSeries.put(year, PlusTimeSeries.get(year) + ts.get(year));
+//            } else {
+//                PlusTimeSeries.put(year, ts.get(year));
+//            }
+//        }
+//        return PlusTimeSeries;
+        // ai解法
+        TimeSeries result = new TimeSeries();
+        result.putAll(this);
+        for (Map.Entry<Integer, Double> e : ts.entrySet()) {
+            result.merge(e.getKey(), e.getValue(), Double::sum);
+        }
+        return result;
     }
 
     /**
@@ -75,7 +104,16 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries dividedBy(TimeSeries ts) {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries dividedTimeSeries = new TimeSeries();
+        List<Integer> Years = this.years();
+        for (int year : Years) {
+            if (!ts.containsKey(year)) {
+                throw new IllegalArgumentException();
+            } else {
+                dividedTimeSeries.put(year, this.get(year) / ts.get(year));
+            }
+        }
+        return dividedTimeSeries;
     }
 
     // TODO: Add any private helper methods.
