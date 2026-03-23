@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.BTree;
+
 public class RedBlackTree<T extends Comparable<T>> {
 
     /* Root of the tree. */
@@ -51,6 +53,9 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     void flipColors(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
+        node.isBlack = !node.isBlack;
+        node.left.isBlack = !node.left.isBlack;
+        node.right.isBlack = !node.right.isBlack;
     }
 
     /**
@@ -62,7 +67,14 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     RBTreeNode<T> rotateRight(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+        boolean nodeColor = node.isBlack;
+        node.isBlack = node.left.isBlack;
+        node.left.isBlack = nodeColor;
+        RBTreeNode<T> temp = node.left.right;
+        RBTreeNode<T> returnNode = node.left;
+        node.left.right = node;
+        node.left = temp;
+        return returnNode;
     }
 
     /**
@@ -74,7 +86,14 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     RBTreeNode<T> rotateLeft(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+        boolean nodeColor = node.isBlack;
+        node.isBlack = node.right.isBlack;
+        node.right.isBlack = nodeColor;
+        RBTreeNode<T> temp = node.right.left;
+        RBTreeNode<T> returnNode = node.right;
+        node.right.left = node;
+        node.right = temp;
+        return returnNode;
     }
 
     /**
@@ -106,16 +125,31 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     private RBTreeNode<T> insertHelper(RBTreeNode<T> node, T item) {
         // TODO: Insert (return) new red leaf node.
-
+        if (node == null) {
+            return new RBTreeNode<>(false, item);
+        }
         // TODO: Handle normal binary search tree insertion.
-
+        if (item.compareTo(node.item) < 0) {
+            node.left = insertHelper(node.left, item);
+        } else if (item.compareTo(node.item) > 0) {
+            node.right = insertHelper(node.right, item);
+        } else {
+            return node;
+        }
         // TODO: Rotate left operation
-
+        if (isRed(node.right) && !isRed(node.left)) { //右红左不红的时候才左旋，都红时应该反转颜色
+            node = rotateLeft(node);
+        }
         // TODO: Rotate right operation
-
+        if (isRed(node.left) && isRed(node.left.left)) {
+            node = rotateRight(node);
+        }
         // TODO: Color flip
+        if (isRed(node.left) && isRed(node.right)) {
+            flipColors(node);
+        }
+        return node; //fix this return statement
 
-        return null; //fix this return statement
     }
 
 }
