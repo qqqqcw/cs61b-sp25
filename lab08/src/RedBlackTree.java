@@ -141,7 +141,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             node = rotateLeft(node);
         }
         // TODO: Rotate right operation
-        if (isRed(node.left) && isRed(node.left.left)) {
+        if (isRed(node.left) && isRed(node.left.left)) { // 左红左左红时才右旋
             node = rotateRight(node);
         }
         // TODO: Color flip
